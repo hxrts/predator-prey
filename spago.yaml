@@ -1,0 +1,15 @@
+package:
+  name: my-purescript-app
+  dependencies:
+    - console
+    - effect
+    - prelude
+    - web-dom
+    - web-html
+  test:
+    main: Test.Main
+    dependencies: []
+workspace:
+  package_set:
+    registry: 63.2.1
+  extra_packages: {}

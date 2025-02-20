@@ -1,0 +1,10 @@
+node_modules/
+.spago/
+.psci_modules/
+
+output/
+public/bundle.js
+.psc-ide-port
+.purs-repl
+
+.DS_Store
