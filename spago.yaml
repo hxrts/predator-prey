@@ -6,6 +6,13 @@ package:
     - prelude
     - web-dom
     - web-html
+    - web-dom-parser
+    - random
+    - arrays
+    - maybe
+    - numbers
+    - strings
+    - foldable-traversable
   test:
     main: Test.Main
     dependencies: []

@@ -5,6 +5,7 @@ mkdir -p public output/Main
 
 # Helper function to show server information
 show_server_info() {
+  local port=$1
   local ip_addresses
   if [[ "$(uname)" == "Darwin" ]]; then
     # macOS command to get IP addresses
@@ -15,9 +16,9 @@ show_server_info() {
   fi
 
   echo "Application available at:"
-  echo "  http://127.0.0.1:8080"
+  echo "  http://127.0.0.1:${port}"
   for ip in $ip_addresses; do
-    echo "  http://$ip:8080"
+    echo "  http://$ip:${port}"
   done
   echo "Hit CTRL-C to stop the server"
   echo ""
@@ -100,14 +101,25 @@ serve-project() {
   # Debug info
   echo "Serving files from public directory..."
   echo "Bundle location: $(pwd)/public/bundle.js"
-  ls -la public/
+  echo "Files in public directory:"
+  ls public/
   echo ""
 
-  # Show server information
-  show_server_info
+  # Kill any existing http-server processes
+  pkill -f "http-server.*public"
 
-  # Start server from public directory
-  http-server public -c-1
+  # Check if port 8080 is available
+  if ! lsof -i:8080 >/dev/null 2>&1; then
+    port=8080
+  else
+    port=8081
+  fi
+
+  # Show server information
+  show_server_info "$port"
+
+  # Start server from public directory with the selected port
+  http-server public -c-1 -p "$port"
 }
 
 # Define the watch-project command
@@ -123,11 +135,27 @@ watch-project() {
 
   echo "Initial build successful!"
   echo ""
-  show_server_info
+
+  # Kill any existing http-server processes
+  pkill -f "http-server.*public"
+
+  # Check if port 8080 is available
+  if ! lsof -i:8080 >/dev/null 2>&1; then
+    port=8080
+  else
+    port=8081
+  fi
+
+  # Show server information
+  show_server_info "$port"
   echo "Watching for changes..."
 
-  # Start the server in the background
-  (http-server public -c-1 &)
+  # Start server in background
+  http-server public -c-1 -p "$port" &
+  server_pid=$!
+
+  # Set up trap to clean up server on script exit
+  trap "kill $server_pid 2>/dev/null" EXIT
 
   # Watch for changes
   while true; do
