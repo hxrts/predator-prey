@@ -6,6 +6,8 @@ The simulation models prey reproduction when empty space is available, predators
 
 As the system evolves over time it can capture emergent behavior such as predator-prey cycles, spatial clustering, and extinction events.
 
+![Screenshot of the simulation](readme_screenshot.png)
+
 ## The Ising Model in Systems Ecology
 
 The classical Ising Model is used in statistical mechanics to describe interactions between binary spin states. In this project, we use the Ising model to model predator-prey dynamics by assigning discrete states to represent Prey (+1 or 🐸), Predator (-1 or 🦊), and Empty space (0 or ⬜).
