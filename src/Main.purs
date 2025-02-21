@@ -34,7 +34,7 @@ latticeSize :: Int
 latticeSize = 10  -- Grid size (10x10)
 
 temperature :: Number
-temperature = 2.5  -- Controls randomness in state transitions (higher T = more randomness)
+temperature = 2.5  -- Controls randomness in state transitions (T→0: deterministic, T→∞: random)
 
 beta :: Number
 beta = 1.0 / temperature  -- Inverse temperature (affects probability of energy changes)
@@ -169,6 +169,27 @@ calculateStats lattice =
       s | s == predatorState -> acc { pred = acc.pred + 1 }
       _ -> acc { empty = acc.empty + 1 }
 
+-- | Create an HTML table with simulation parameters
+paramsToHtml :: String
+paramsToHtml =
+  "<table style=\"margin: 20px 0; border-collapse: collapse; font-family: monospace;\">" <>
+    "<tr>" <>
+      "<th style=\"padding: 8px; border: 1px solid #ddd; text-align: left;\" colspan=\"2\">Simulation Parameters</th>" <>
+    "</tr>" <>
+    "<tr>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Grid Size</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show latticeSize <> "×" <> show latticeSize <> "</td>" <>
+    "</tr>" <>
+    "<tr>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Temperature</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show temperature <> "</td>" <>
+    "</tr>" <>
+    "<tr>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Monte Carlo Steps</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">1000</td>" <>
+    "</tr>" <>
+  "</table>"
+
 -- | Create an HTML table with simulation statistics
 statsToHtml :: SimulationStats -> String
 statsToHtml stats = 
@@ -192,11 +213,6 @@ statsToHtml stats =
       "<td style=\"padding: 8px; border: 1px solid #ddd;\">Empty ⬜</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.emptyCount <> "</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show (floor (stats.emptyPercentage * 10.0) / 10.0) <> "%</td>" <>
-    "</tr>" <>
-    "<tr>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Total</td>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.totalCells <> "</td>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">100.0%</td>" <>
     "</tr>" <>
   "</table>"
 
@@ -226,6 +242,10 @@ main = do
           finalState = 
             "<div style='font-family: monospace;'>" <>
             "<div style='display: flex; gap: 2rem; justify-content: space-between;'>" <>
+              "<div style='flex: 1;'>" <>
+                "<h3>Parameters</h3>" <>
+                "<div style='margin-top: 80px;'>" <> paramsToHtml <> "</div>" <>
+              "</div>" <>
               "<div style='flex: 1;'>" <>
                 "<h3>Initial State</h3>" <>
                 "<pre style='line-height: 1.5;'>" <> initialState <> "</pre>" <>
