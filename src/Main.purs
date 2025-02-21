@@ -23,11 +23,11 @@ foreign import setInnerHTML :: Element -> String -> Effect Unit
 -- Define possible states in the lattice
 type State = Int
 preyState :: State
-preyState = 1        -- Represents a prey animal  🐑
+preyState = 1        -- Represents a prey animal  🐸
 predatorState :: State
-predatorState = -1   -- Represents a predator 👹
+predatorState = -1   -- Represents a predator 🦊
 emptyState :: State
-emptyState = 0       -- Represents an empty space 🌳
+emptyState = 0       -- Represents an empty space ⬜
 
 -- Lattice parameters
 latticeSize :: Int
@@ -134,9 +134,9 @@ latticeToString lattice =
     -- Maps numerical states to emojis for better visualization
     stateToChar :: State -> String
     stateToChar s = case s of
-      s' | s' == preyState -> "🐑"       -- Prey
-      s' | s' == predatorState -> "👹"   -- Predator
-      _ -> "🌳"                          -- Empty space
+      s' | s' == preyState -> "🐸 "       -- Prey
+      s' | s' == predatorState -> "🦊 "   -- Predator
+      _ -> "⬜ "                          -- Empty space
 
 -- | Calculate statistics for the current lattice state
 type SimulationStats = 
@@ -179,24 +179,24 @@ statsToHtml stats =
       "<th style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">Percentage</th>" <>
     "</tr>" <>
     "<tr>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Prey 🐑</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Prey 🐸</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.preyCount <> "</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show (floor (stats.preyPercentage * 10.0) / 10.0) <> "%</td>" <>
     "</tr>" <>
     "<tr>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Predators 👹</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Predators 🦊</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.predatorCount <> "</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show (floor (stats.predatorPercentage * 10.0) / 10.0) <> "%</td>" <>
     "</tr>" <>
     "<tr>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Empty 🌳</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Empty ⬜</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.emptyCount <> "</td>" <>
       "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show (floor (stats.emptyPercentage * 10.0) / 10.0) <> "%</td>" <>
     "</tr>" <>
     "<tr>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd;\"><strong>Total</strong></td>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\"><strong>" <> show stats.totalCells <> "</strong></td>" <>
-      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\"><strong>100.0%</strong></td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd;\">Total</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">" <> show stats.totalCells <> "</td>" <>
+      "<td style=\"padding: 8px; border: 1px solid #ddd; text-align: right;\">100.0%</td>" <>
     "</tr>" <>
   "</table>"
 
@@ -225,14 +225,20 @@ main = do
       let finalStats = calculateStats finalLattice
           finalState = 
             "<div style='font-family: monospace;'>" <>
-            "<h3>Initial State</h3>" <>
-            "<pre style='line-height: 1.5;'>" <> initialState <> "</pre>" <>
-            "<h4>Initial Statistics</h4>" <>
-            statsToHtml initialStats <>
-            "<h3>Final State</h3>" <>
-            "<pre style='line-height: 1.5;'>" <> latticeToString finalLattice <> "</pre>" <>
-            "<h4>Final Statistics</h4>" <>
-            statsToHtml finalStats <>
+            "<div style='display: flex; gap: 2rem; justify-content: space-between;'>" <>
+              "<div style='flex: 1;'>" <>
+                "<h3>Initial State</h3>" <>
+                "<pre style='line-height: 1.5;'>" <> initialState <> "</pre>" <>
+                "<h4 style='margin-top:80px;'>Initial Statistics</h4>" <>
+                statsToHtml initialStats <>
+              "</div>" <>
+              "<div style='flex: 1;'>" <>
+                "<h3>Final State</h3>" <>
+                "<pre style='line-height: 1.5;'>" <> latticeToString finalLattice <> "</pre>" <>
+                "<h4 style='margin-top:80px;'>Final Statistics</h4>" <>
+                statsToHtml finalStats <>
+              "</div>" <>
+            "</div>" <>
             "</div>"
       
       updateDisplay element finalState

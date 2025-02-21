@@ -1,14 +1,14 @@
 # Predator-Prey Ising Model
 
-This program uses an Ising model to simulate the interaction between predators and prey on a 2D lattice using a Monte Carlo algorithm with the Metropolis-Hastings acceptance rule.
+This simulates the interaction between predators and prey with a classical Ising model on a 2D lattice, using a Monte Carlo algorithm that accepts states based on the Metropolis-Hastings rule.
 
-The simulation models prey reproduction when empty space is available, predators hunting prey, predators starving if no prey is nearby, and the Boltzmann probability that governs whether transitions occur.
+The simulation models prey reproduction when empty space is available, predators hunting prey, and predators starving if no prey are nearby, using a Boltzmann probability to govern whether state transitions will occur.
 
-The system evolves over time capturing emergent behavior such as predator-prey cycles, spatial clustering, and extinction events.
+As the system evolves over time it can capture emergent behavior such as predator-prey cycles, spatial clustering, and extinction events.
 
 ## The Ising Model in Systems Ecology
 
-The classical Ising Model is used in statistical mechanics to describe interactions between binary spin states. In this project, we use the Ising model to model predator-prey dynamics by assigning discrete states to represent, +1 (🐑, Prey), -1 (👹, Predator), and 0 (🌳, Empty space).
+The classical Ising Model is used in statistical mechanics to describe interactions between binary spin states. In this project, we use the Ising model to model predator-prey dynamics by assigning discrete states to represent Prey (+1 or 🐸), Predator (-1 or 🦊), and Empty space (0 or ⬜).
 
 Each site in the lattice interacts with its nearest-neighbors and follows the Metropolis-Hastings rule to determine if it's state should change.
 
@@ -16,26 +16,26 @@ Each site in the lattice interacts with its nearest-neighbors and follows the Me
 
 #### Grid Representation
 
-The system is modeled as a 10×10 grid. Each cell represents an ecosystem state. 
+The system is modeled as a 10×10 grid. Each cell represents a local ecosystem state. 
 
 #### Monte Carlo Steps
 
 For 1000 simulation steps
 1. Select a random site (i, j)
 2. Determine valid state transitions according to the following rules:
-   - Prey reproduce if an empty neighbor exists
-   - Predators hunt prey, thereby growing their population and turning prey into predators
-   - Predators starve if no prey are nearby
+   - Prey will reproduce if an empty neighbor exists, turning ⬜ → 🐸
+   - Predators hunt prey, thereby growing their population and turning prey into predators, turning 🐸 → 🦊
+   - Predators starve if no prey are nearby, turning 🦊 → ⬜
 3. Compute energy change ΔH using the Ising-style Hamiltonian
    ```math
    H = - J \sum_{\langle i,j \rangle} s_i s_j - h \sum_i s_i
    ```
    where sᵢ is the state of site i, and nearest-neighbor interactions drive the system
-4. Apply the Metropolis-Hastings rule: Always accept lower-energy transitions and only accept higher-energy transitions with probability:
+4. Apply the Metropolis-Hastings rule: always accept state transitions that lower the system energy, only accept state transitions to higher-energy system configurations with probability:
    ```math
    P(\text{accept}) = e^{-\beta \Delta H}
    ```
-1. Update the grid accordingly
+5. Update the grid accordingly
 
 #### Energy Calculation
 
@@ -43,7 +43,7 @@ Neighboring predator-prey interactions modify system energy. The probability of 
 
 #### Visualization
 
-The lattice is printed before and after the simulation using emojis: +1 (🐑, Prey), -1 (👹, Predator), and 0 (🌳, Empty space).
+The lattice is shown before and after the simulation, represented by emojis: Prey = +1 = 🐸, Predator = -1 = 🦊, and Empty space = 0 = ⬜.
 
 ## Development
 
